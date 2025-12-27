@@ -1,0 +1,7 @@
+{
+  "name": "MomentumAI",
+  "description": "The Retention-First Feed Generator that uses the 'South Park Rule' to engineer viral momentum into every multi-post feed with AI-generated visuals and high-retention scripts.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
