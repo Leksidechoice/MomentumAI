@@ -124,7 +124,7 @@ const App: React.FC = () => {
   const combinedBundle = `${fullScript}\n\n.\n.\n.\n${hashtagText}`;
 
   return (
-    <div className="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white bg-[#030303]">
       <Header />
       
       {status.step !== 'idle' && status.step !== 'error' && (
@@ -132,212 +132,215 @@ const App: React.FC = () => {
       )}
 
       <main className="flex-1 flex flex-col items-center">
-        {/* Hero & Input */}
-        <section className={`w-full max-w-6xl px-6 py-12 transition-all duration-1000 ${feed ? 'opacity-0 h-0 overflow-hidden pointer-events-none -translate-y-20' : 'opacity-100'}`}>
-          <div className="text-center mb-16 space-y-6 animate-slide-in">
-            <h2 className="text-5xl md:text-8xl font-brand font-black uppercase italic tracking-tighter leading-[0.9]">
-              Viral <span className="gradient-text">Momentum.</span><br/>
-              <span className="text-3xl md:text-5xl opacity-40">Retention Engineered.</span>
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg md:text-xl font-medium">
-              We use the "South Park Rule" to engineer narrative flow. <br className="hidden md:block"/>
-              High-retention scripts. Cinematic visuals. Zero fluff.
-            </p>
-          </div>
-
-          <div className="glass-panel p-3 rounded-[3rem] shadow-2xl shadow-indigo-500/10 border border-white/5 relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-emerald-500/20 rounded-[3rem] blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-            <div className="relative flex flex-col md:flex-row gap-2">
-              <input 
-                type="text" 
-                placeholder="What story stops the scroll today?"
-                className="flex-1 bg-transparent border-none focus:ring-0 p-8 text-xl md:text-2xl font-bold outline-none placeholder:text-white/10"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-              />
-              <button 
-                onClick={handleGenerate}
-                disabled={!topic || status.step !== 'idle'}
-                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-20 px-16 py-6 rounded-[2rem] text-xl font-black italic uppercase transition-all flex items-center justify-center gap-4 whitespace-nowrap shadow-xl"
-              >
-                Engineer
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-            <div className="glass-panel p-8 rounded-[2.5rem] space-y-4 border border-white/5">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic">Aspect Ratio</label>
-              <div className="flex gap-3">
-                {['1:1', '9:16'].map(ratio => (
-                  <button
-                    key={ratio}
-                    onClick={() => setAspectRatio(ratio as AspectRatio)}
-                    className={`flex-1 py-4 rounded-2xl transition-all border font-black italic text-xs ${aspectRatio === ratio ? 'bg-white text-black border-white' : 'bg-white/5 text-white/40 border-white/10'}`}
-                  >
-                    {ratio}
-                  </button>
-                ))}
-              </div>
+        {/* Input Phase */}
+        {!feed && (
+          <section className="w-full max-w-4xl px-6 py-20 flex flex-col items-center text-center">
+            <div className="space-y-6 animate-slide-in mb-16">
+              <h2 className="text-6xl md:text-8xl font-brand font-black uppercase italic tracking-tighter leading-[0.9]">
+                Viral <span className="gradient-text">Momentum.</span><br/>
+                <span className="text-2xl md:text-4xl opacity-30 tracking-widest uppercase">Retention Engineered.</span>
+              </h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-lg font-medium">
+                The "South Park Rule" engine for content creators. <br/>
+                Zero fluff. All narrative drive.
+              </p>
             </div>
 
-            <div className="glass-panel p-8 rounded-[2.5rem] space-y-4 border border-white/5">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic">Slides: {slideCount}</label>
-              <div className="pt-2">
+            <div className="w-full glass-panel p-3 rounded-[3rem] shadow-2xl border border-white/5 relative group mb-12">
+              <div className="relative flex flex-col md:flex-row gap-2">
                 <input 
-                  type="range" min="1" max="8" step="1" 
-                  className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-                  value={slideCount}
-                  onChange={(e) => setSlideCount(parseInt(e.target.value))}
+                  type="text" 
+                  placeholder="Enter your hook or topic..."
+                  className="flex-1 bg-transparent border-none focus:ring-0 p-8 text-xl md:text-2xl font-bold outline-none placeholder:text-white/10"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                 />
-                <div className="flex justify-between mt-2 text-[10px] font-black text-white/20 uppercase italic">
-                   <span>Snack</span>
-                   <span>Binge</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-panel p-8 rounded-[2.5rem] space-y-4 border border-white/5 lg:col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic">Engine Tuning</label>
-              <div className="flex flex-wrap gap-2">
-                {Object.values(VisualStyle).map(v => (
-                  <button
-                    key={v}
-                    onClick={() => setStyle(v)}
-                    className={`px-4 py-3 text-[10px] uppercase font-black tracking-widest rounded-xl border transition-all ${style === v ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/5 text-white/40'}`}
-                  >
-                    {v}
-                  </button>
-                ))}
-                <button
-                    onClick={() => setQuality(quality === ImageQuality.STANDARD ? ImageQuality.ULTRA : ImageQuality.STANDARD)}
-                    className={`px-4 py-3 text-[10px] uppercase font-black tracking-widest rounded-xl border transition-all ${quality === ImageQuality.ULTRA ? 'bg-emerald-600 border-emerald-500' : 'bg-white/5 border-white/5 text-white/40'}`}
+                <button 
+                  onClick={handleGenerate}
+                  disabled={!topic || status.step !== 'idle'}
+                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-20 px-12 py-6 rounded-[2rem] text-xl font-black italic uppercase transition-all flex items-center justify-center gap-4 whitespace-nowrap shadow-xl group"
                 >
-                  {quality === ImageQuality.ULTRA ? 'Ultra Res Active' : 'Go Ultra'}
+                  Engineer
+                  <svg className="group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
                 </button>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Momentum Delivered */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+               <div className="glass-panel p-6 rounded-3xl border border-white/5 space-y-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block italic">Slides</span>
+                  <div className="flex items-center gap-4">
+                     <input type="range" min="1" max="8" value={slideCount} onChange={(e) => setSlideCount(parseInt(e.target.value))} className="flex-1 accent-indigo-500"/>
+                     <span className="text-xl font-black italic">{slideCount}</span>
+                  </div>
+               </div>
+               <div className="glass-panel p-6 rounded-3xl border border-white/5 space-y-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block italic">Ratio</span>
+                  <div className="flex bg-black/40 p-1 rounded-xl">
+                    {['1:1', '9:16'].map(r => (
+                      <button key={r} onClick={() => setAspectRatio(r as AspectRatio)} className={`flex-1 py-2 text-[10px] font-black uppercase italic rounded-lg transition-all ${aspectRatio === r ? 'bg-white text-black' : 'text-gray-500'}`}>{r}</button>
+                    ))}
+                  </div>
+               </div>
+               <div className="glass-panel p-6 rounded-3xl border border-white/5 space-y-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block italic">Style</span>
+                  <select value={style} onChange={(e) => setStyle(e.target.value as VisualStyle)} className="w-full bg-transparent border-none text-[10px] font-black uppercase italic outline-none">
+                    {Object.values(VisualStyle).map(v => <option key={v} value={v}>{v}</option>)}
+                  </select>
+               </div>
+            </div>
+          </section>
+        )}
+
+        {/* Workstation Phase */}
         {feed && (
-          <section className="w-full max-w-7xl px-6 py-12 animate-slide-in">
-            <div className="flex flex-col lg:flex-row gap-12">
-              
-              {/* Visuals Canvas */}
-              <div className="lg:w-3/5 space-y-8">
-                 <div className="flex items-center justify-between">
-                    <button 
-                      onClick={() => setFeed(null)}
-                      className="flex items-center gap-3 text-[10px] font-black text-indigo-400 hover:text-white transition-colors uppercase italic bg-indigo-500/10 px-4 py-2 rounded-full border border-indigo-500/20"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                      Re-Engineer
-                    </button>
-                    <div className="flex gap-2">
-                       <span className="text-[10px] bg-white/10 px-3 py-1 rounded-full font-black uppercase tracking-tighter border border-white/5">{feed.aspectRatio}</span>
-                       <span className="text-[10px] bg-emerald-500 px-3 py-1 rounded-full text-black font-black uppercase tracking-tighter italic">Viral Verified</span>
-                    </div>
-                 </div>
+          <section className="w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col animate-slide-in">
+            {/* Context bar */}
+            <div className="px-8 py-4 border-b border-white/5 flex items-center justify-between bg-black/40 backdrop-blur-md">
+                <div className="flex items-center gap-4">
+                  <button onClick={() => setFeed(null)} className="text-[10px] font-black uppercase italic text-gray-500 hover:text-white transition-colors flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Back to Lab
+                  </button>
+                  <h3 className="hidden md:block text-sm font-bold italic text-white/40 truncate max-w-[300px]">Topic: {feed.topic}</h3>
+                </div>
+                <div className="flex items-center gap-4">
+                   <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                      <span className="text-[10px] font-black uppercase tracking-widest italic text-emerald-400">Viral Engine Active</span>
+                   </div>
+                   <button 
+                    onClick={() => handleCopyText(combinedBundle, 'Full Bundle')}
+                    className="bg-white text-black px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-indigo-400 transition-colors shadow-lg"
+                   >
+                     Export Bundle
+                   </button>
+                </div>
+            </div>
 
-                 <div className="flex gap-6 overflow-x-auto pb-8 slide-container snap-x snap-mandatory">
-                    {feed.slides.map((s, idx) => (
-                      <div key={s.id} className="flex-shrink-0 snap-center">
-                         <SlideCard 
-                           slide={s} 
-                           style={feed.style} 
-                           onDownload={handleDownloadImage}
-                           onCopy={handleCopyImage}
-                         />
-                         <div className="mt-4 flex gap-2">
-                            <button 
-                                onClick={() => s.imageUrl && handleDownloadImage(s.imageUrl, idx)}
-                                className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-[10px] font-black uppercase italic text-gray-400 transition-all border border-white/5"
-                            >
-                                Export Slide {idx + 1}
-                            </button>
-                         </div>
+            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+              {/* Left Pane: Visual Preview Container */}
+              <div className="flex-1 overflow-y-auto bg-neutral-950/50 p-8 custom-scrollbar">
+                <div className="max-w-4xl mx-auto space-y-12">
+                  <div className="text-center space-y-2">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 italic">Visual Sequence</h4>
+                    <p className="text-gray-500 text-xs font-medium">Scroll to preview engineered frames</p>
+                  </div>
+                  
+                  {/* Vertical Mockup Feed */}
+                  <div className="flex flex-col items-center gap-12 pb-20">
+                    {feed.slides.map((slide, idx) => (
+                      <div key={slide.id} className="relative w-full max-w-[420px] group">
+                        <SlideCard 
+                          slide={slide} 
+                          style={feed.style} 
+                          onDownload={handleDownloadImage}
+                          onCopy={handleCopyImage}
+                        />
+                        {idx < feed.slides.length - 1 && (
+                          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-10">
+                             <div className="flex flex-col items-center gap-1">
+                                <div className="w-px h-6 bg-gradient-to-b from-indigo-500 to-transparent"></div>
+                                <div className="bg-indigo-600/20 backdrop-blur-xl border border-indigo-500/30 px-3 py-1 rounded-full">
+                                  <span className="text-[8px] font-black uppercase italic text-indigo-400 tracking-widest">
+                                    {feed.slides[idx + 1].momentumBridge || 'THEN'}
+                                  </span>
+                                </div>
+                                <div className="w-px h-6 bg-gradient-to-t from-indigo-500 to-transparent"></div>
+                             </div>
+                          </div>
+                        )}
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Pane: Narrative Blueprint */}
+              <div className="w-full lg:w-[450px] border-l border-white/5 bg-[#080808] overflow-y-auto p-8 custom-scrollbar space-y-8">
+                 <div className="space-y-6">
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic">Narrative Engine</h4>
+                      <h2 className="text-2xl font-brand font-black italic uppercase tracking-tighter">The Blueprint</h2>
+                    </div>
+
+                    {/* Hook Analysis Card */}
+                    <div className="glass-panel p-6 rounded-3xl border border-indigo-500/20 bg-indigo-500/5 relative overflow-hidden group">
+                       <div className="absolute -right-4 -top-4 text-8xl font-black text-indigo-500/5 rotate-12">HOOK</div>
+                       <div className="relative space-y-3">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400 italic bg-indigo-500/10 px-3 py-1 rounded-full">Retention Strategy</span>
+                          <p className="text-sm text-gray-200 font-bold italic leading-relaxed">
+                            "{feed.hookAnalysis}"
+                          </p>
+                       </div>
+                    </div>
+
+                    {/* Full Script Console */}
+                    <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-black/40 space-y-4">
+                       <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 italic">Full Script Console</span>
+                          <button onClick={() => handleCopyText(fullScript, 'Script')} className="p-2 hover:bg-white/5 rounded-lg transition-colors text-indigo-400">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                          </button>
+                       </div>
+                       <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar text-sm font-bold text-gray-300 italic whitespace-pre-line leading-relaxed selection:bg-indigo-500">
+                          {fullScript}
+                       </div>
+                       <div className="pt-4 border-t border-white/5 flex items-center justify-between text-[9px] font-black text-gray-600 uppercase tracking-tighter">
+                          <span>{feed.totalWords} Words</span>
+                          <span className="text-emerald-500 italic flex items-center gap-1">
+                             <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                             Optimized
+                          </span>
+                       </div>
+                    </div>
+
+                    {/* Metadata Bundle */}
+                    <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-black/40 space-y-4">
+                       <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 italic">Distribution Hub</span>
+                          <button onClick={() => handleCopyText(hashtagText, 'Hashtags')} className="text-[10px] font-black text-indigo-400 hover:text-white uppercase italic underline underline-offset-4">Copy Tags</button>
+                       </div>
+                       <div className="flex flex-wrap gap-2">
+                          {feed.hashtags.map(tag => (
+                            <span key={tag} className="px-3 py-1.5 bg-black rounded-xl text-[10px] font-black text-gray-500 border border-white/5 uppercase italic">
+                              #{tag.replace(/^#/, '')}
+                            </span>
+                          ))}
+                       </div>
+                    </div>
+
+                    {/* Pro Tools */}
+                    <div className="grid grid-cols-2 gap-4">
+                       <div className="p-4 rounded-2xl border border-white/5 bg-white/5 flex flex-col gap-1">
+                          <span className="text-[8px] font-black text-gray-600 uppercase">Engine</span>
+                          <span className="text-[10px] font-black text-white italic truncate">{feed.style}</span>
+                       </div>
+                       <div className="p-4 rounded-2xl border border-white/5 bg-white/5 flex flex-col gap-1">
+                          <span className="text-[8px] font-black text-gray-600 uppercase">Quality</span>
+                          <span className="text-[10px] font-black text-emerald-500 italic uppercase">Verified</span>
+                       </div>
+                    </div>
                  </div>
               </div>
-
-              {/* Strategy & Script */}
-              <div className="lg:w-2/5 space-y-8">
-                {/* Hook Strategy Panel */}
-                <div className="glass-panel p-8 rounded-[3rem] border border-white/10 bg-indigo-900/10">
-                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 italic mb-4 flex items-center gap-2">
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.05.5-9 4.77-9 9.95 0 5.52 4.48 10 10 10 1.45 0 2.83-.32 4.07-.88l-1.53-2.6c-.79.3-1.64.48-2.54.48z"/></svg>
-                      Hook Analysis
-                   </h4>
-                   <p className="text-sm text-gray-300 font-bold italic leading-relaxed">
-                     "{feed.hookAnalysis}"
-                   </p>
-                </div>
-
-                {/* Final Script Panel */}
-                <div className="glass-panel p-8 rounded-[3rem] border border-white/10 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-6">
-                    <button 
-                      onClick={() => handleCopyText(fullScript, 'Script')}
-                      className="p-4 bg-indigo-600 text-white rounded-[1.5rem] shadow-lg hover:scale-110 transition-all active:scale-95"
-                    >
-                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    </button>
-                  </div>
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic mb-6">Optimized Narrative</h4>
-                  <div className="max-h-[300px] md:max-h-[400px] overflow-y-auto pr-4 text-gray-200 leading-relaxed font-bold whitespace-pre-line text-sm slide-container italic p-6 rounded-2xl bg-white/5 border border-white/5">
-                    {fullScript}
-                  </div>
-                  <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase text-gray-600">{feed.totalWords} words generated</span>
-                    <span className="text-[10px] font-black uppercase text-emerald-400 italic flex items-center gap-1">
-                      <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                      Facebook Ready
-                    </span>
-                  </div>
-                </div>
-
-                <div className="glass-panel p-8 rounded-[3rem] border border-white/10 bg-white/5">
-                  <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 italic">Metadata Bundle</h4>
-                    <button onClick={() => handleCopyText(hashtagText, 'Hashtags')} className="text-[10px] font-black uppercase italic text-indigo-400 hover:text-white underline underline-offset-4">Copy All</button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {feed.hashtags.map(tag => (
-                      <span key={tag} className="px-3 py-2 bg-black/40 rounded-xl text-[10px] font-black text-gray-400 border border-white/5 uppercase italic tracking-tighter">
-                        #{tag.replace(/^#/, '')}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => handleCopyText(combinedBundle, 'Full Bundle')}
-                  className="w-full py-6 bg-white text-black font-black uppercase italic rounded-[2.5rem] text-sm transition-all hover:bg-gray-200 flex items-center justify-center gap-4 shadow-2xl"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                  Copy Everything (FB Format)
-                </button>
-              </div>
-
             </div>
           </section>
         )}
       </main>
 
-      <footer className="py-12 px-8 border-t border-white/5 text-center mt-auto">
-        <div className="flex items-center justify-center gap-2 mb-4">
-           <div className="w-6 h-6 bg-white/10 rounded flex items-center justify-center font-brand font-black text-white italic text-xs">M</div>
-           <p className="text-[10px] uppercase font-black tracking-[0.5em] text-gray-700">MomentumAI Engineering</p>
-        </div>
-        <p className="text-[8px] uppercase font-black tracking-widest text-gray-800">
-           Strictly Optimized for Narrative Flow • Built for the modern creator economy
-        </p>
-      </footer>
+      {/* Persistent Lab Footer (Only if not in Workstation) */}
+      {!feed && (
+        <footer className="py-12 px-8 border-t border-white/5 text-center mt-auto bg-[#050505]">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-6 h-6 bg-white/10 rounded flex items-center justify-center font-brand font-black text-white italic text-xs">M</div>
+            <p className="text-[10px] uppercase font-black tracking-[0.5em] text-gray-700">MomentumAI Engineering</p>
+          </div>
+          <p className="text-[8px] uppercase font-black tracking-widest text-gray-800">
+            Strictly Optimized for Narrative Flow • Built for the modern creator economy
+          </p>
+        </footer>
+      )}
     </div>
   );
 };
